@@ -13,14 +13,22 @@ function startGame(){
 
     console.log(canvasSize,elementsSize);
 
-        game.font = elementsSize + 'px Verdana';
-        game.textAlign = "start";
+    game.font = elementsSize + 'px Verdana';
+    game.textAlign = 'start';
 
-        for( let i = 0; i < 10; i++){
-            for(let j=0; j < 10; j++){
-                game.fillText(emojis['X'], elementsSize  * i, elementsSize * (j+1));
-            }
+
+    const map = maps[0];
+    const mapRows = map.trim().split('\n'); 
+    const mapRowCols = mapRows.map(row => row.trim().split(''));  
+
+    console.log(map,mapRows,mapRowCols);
+
+    for( let i = 0; i < 10; i++){
+        for(let j=0; j < 10; j++){
+         console.log (i,j);
+            game.fillText(emojis[mapRowCols[j][i]], elementsSize  * (i+0), elementsSize * (j+1));
         }
+    }
         
     // game.fillRect(100,25,100,100); //tamaño del canvas
     // game.clearRect(125,50,50,50) // borrar parte del canvas
@@ -43,7 +51,7 @@ function setCanvasSize(){
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize);
 
-     elementsSize = (canvasSize / 10) -1 ;
+     elementsSize = (canvasSize / 10.2) ;
 
      startGame();
 
