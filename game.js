@@ -42,6 +42,7 @@ function startGame(){
     game.font = elementsSize + 'px Verdana';
     game.textAlign = 'start';
 
+    game.clearRect(0,0,canvasSize,canvasSize);
 
     const map = maps[0];
     const mapRows = map.trim().split('\n'); 
@@ -116,19 +117,41 @@ function moveByKeys(event){
 
 }
 function moveUp(){
-    console.log('Me muevo hacia arriba');
-    playerPos.y -= elementsSize;
-    setCanvasSize();
+    if( playerPos.y  < elementsSize){
+        console.log('out');
+    }
+    else{
+        playerPos.y -= elementsSize;
+    }
+    startGame();
 }
 function moveDown(){
-    playerPos.y += elementsSize;
-    setCanvasSize();
+    if( playerPos.y + elementsSize > canvasSize){
+        console.log('out');
+    }
+    else{
+        playerPos.y += elementsSize;
+    }
+    startGame();
 }
 function moveLeft(){
-    playerPos.x -= elementsSize;
-    setCanvasSize();
+    if( playerPos.x  < elementsSize/2){
+        console.log('out');
+    }
+    else{
+        playerPos.x -= elementsSize;
+    }
+    
+    startGame();
 }
 function moveRight(){
-    playerPos.x += elementsSize;
-    setCanvasSize();
+
+    if( playerPos.x + elementsSize > canvasSize -elementsSize){
+        console.log('out');
+    }
+    else{
+        playerPos.x += elementsSize;
+    }
+    
+    startGame();
 }
