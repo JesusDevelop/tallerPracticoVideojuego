@@ -22,6 +22,17 @@ window.addEventListener('resize', setCanvasSize);
 let canvasSize;
 let elementsSize;
 
+let playerPos = {
+    x:undefined,
+    y:undefined,
+};
+
+function movePlayer(){
+    
+    game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
+    
+}
+
 
 function startGame(){
 
@@ -36,26 +47,24 @@ function startGame(){
     const mapRows = map.trim().split('\n'); 
     const mapRowCols = mapRows.map(row => row.trim().split(''));  
 
-    console.log(map,mapRows,mapRowCols);
-
     const imprimirMaps = mapRowCols.forEach( (row, rowI) => {   
         row.forEach( (col, colI) => {
             const emoji = emojis[col];
             const posX = elementsSize * (colI);
             const posY = elementsSize * (rowI+1);
+
+            if(playerPos.x === undefined && col == 'O'){
+
+                playerPos.x = posX;
+                playerPos.y = posY;
+                console.log({playerPos});
+            }
+
             game.fillText(emoji, posX, posY);
         })
-        
+
     });
-
-    // for( let row = 0; row < 10; row++){
-    //     for(let col=0; col < 10; col++){
-
-    //         game.fillText(emojis[mapRowCols[row][col]], elementsSize  * (col), elementsSize * (row+1));
-    //     }
-    // }
-        
- 
+    movePlayer();
 }
 
 function setCanvasSize(){
@@ -108,13 +117,18 @@ function moveByKeys(event){
 }
 function moveUp(){
     console.log('Me muevo hacia arriba');
+    playerPos.y -= elementsSize;
+    setCanvasSize();
 }
 function moveDown(){
-    console.log('Me muevo hacia abajo');
+    playerPos.y += elementsSize;
+    setCanvasSize();
 }
 function moveLeft(){
-    console.log('Me muevo hacia izquieda');
+    playerPos.x -= elementsSize;
+    setCanvasSize();
 }
 function moveRight(){
-    console.log('Me muevo hacia derecha');
+    playerPos.x += elementsSize;
+    setCanvasSize();
 }
