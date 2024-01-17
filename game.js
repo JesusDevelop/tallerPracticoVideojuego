@@ -27,8 +27,15 @@ let playerPos = {
     y:undefined,
 };
 
+const giftPos = {
+    x:undefined,
+    y:undefined,
+};
+
 function movePlayer(){
-    
+    if(playerPos.x.toFixed(3) == giftPos.x.toFixed(3) && playerPos.y.toFixed(3) == giftPos.y.toFixed(3)){
+        console.log('has ganao');
+    }
     game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
     
 }
@@ -44,7 +51,7 @@ function startGame(){
 
     game.clearRect(0,0,canvasSize,canvasSize);
 
-    const map = maps[0];
+    const map = maps[1];
     const mapRows = map.trim().split('\n'); 
     const mapRowCols = mapRows.map(row => row.trim().split(''));  
 
@@ -59,6 +66,9 @@ function startGame(){
                 playerPos.x = posX;
                 playerPos.y = posY;
                 console.log({playerPos});
+            } else if (col == 'I'){
+                giftPos.x = posX;
+                giftPos.y = posY;
             }
 
             game.fillText(emoji, posX, posY);
@@ -117,7 +127,7 @@ function moveByKeys(event){
 
 }
 function moveUp(){
-    if( playerPos.y  < elementsSize){
+    if( playerPos.y - elementsSize  < elementsSize){
         console.log('out');
     }
     else{
@@ -132,10 +142,12 @@ function moveDown(){
     else{
         playerPos.y += elementsSize;
     }
+    
+
     startGame();
 }
 function moveLeft(){
-    if( playerPos.x  < elementsSize/2){
+    if( playerPos.x  - elementsSize < 0){
         console.log('out');
     }
     else{
