@@ -32,6 +32,10 @@ const giftPos = {
     y:undefined,
 };
 
+let enemiesPos = [];
+
+let flag= true;
+
 function movePlayer(){
     if(playerPos.x.toFixed(3) == giftPos.x.toFixed(3) && playerPos.y.toFixed(3) == giftPos.y.toFixed(3)){
         console.log('has ganao');
@@ -70,11 +74,20 @@ function startGame(){
                 giftPos.x = posX;
                 giftPos.y = posY;
             }
+            else if( col == 'X' && flag){
+
+                enemiesPos.push({
+                    x: posX,
+                    y: posY,
+                });
+                
+            }
 
             game.fillText(emoji, posX, posY);
         })
 
     });
+    flag= false;
     movePlayer();
 }
 
