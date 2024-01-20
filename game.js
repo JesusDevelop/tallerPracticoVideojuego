@@ -34,7 +34,6 @@ const giftPos = {
 
 let enemiesPos = [];
 
-let flag= true;
 
 function movePlayer(){
     if(playerPos.x.toFixed(3) == giftPos.x.toFixed(3) && playerPos.y.toFixed(3) == giftPos.y.toFixed(3)){
@@ -54,7 +53,7 @@ function startGame(){
     game.textAlign = 'start';
 
     game.clearRect(0,0,canvasSize,canvasSize);
-
+    enemiesPos = [];
     const map = maps[1];
     const mapRows = map.trim().split('\n'); 
     const mapRowCols = mapRows.map(row => row.trim().split(''));  
@@ -74,7 +73,7 @@ function startGame(){
                 giftPos.x = posX;
                 giftPos.y = posY;
             }
-            else if( col == 'X' && flag){
+            else if( col == 'X'){
 
                 enemiesPos.push({
                     x: posX,
@@ -87,7 +86,7 @@ function startGame(){
         })
 
     });
-    flag= false;
+ 
     movePlayer();
 }
 
