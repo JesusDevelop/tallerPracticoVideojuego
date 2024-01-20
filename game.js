@@ -39,6 +39,18 @@ function movePlayer(){
     if(playerPos.x.toFixed(3) == giftPos.x.toFixed(3) && playerPos.y.toFixed(3) == giftPos.y.toFixed(3)){
         console.log('has ganao');
     }
+
+    const enemyCollision = enemiesPos.find(enemy => {
+
+        const enemyCollisionX = enemy.x == playerPos.x;
+        const enemyCollisionY = enemy.y == playerPos.y;
+
+        return enemyCollisionX && enemyCollisionY;
+    });
+
+    if  (enemyCollision){
+        console.log('Chocaste con una bomba');
+    }
     game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
     
 }
