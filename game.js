@@ -16,6 +16,7 @@ const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
 
 const spanLives = document.querySelector('#lives')
+const spanTime = document.querySelector('#time')
 
 
 window.addEventListener('load', setCanvasSize); // que cargue el juego luego de haber cargado la pagina o el html para evitar futuros errores
@@ -23,6 +24,10 @@ window.addEventListener('resize', setCanvasSize);
 
 let canvasSize;
 let elementsSize;
+let timeStar;
+let timeInterval = undefined;
+let playerTime = 0;
+
 let level = 0;
 let life = 3;
 
@@ -80,6 +85,11 @@ function startGame(){
     if(!map){
         gameWin();
         return;
+    }
+
+    if(!timeStar){
+        timeStar = Date.now();
+        timeInterval = setInterval(showTime,100);
     }
     const mapRows = map.trim().split('\n'); 
     const mapRowCols = mapRows.map(row => row.trim().split(''));  
@@ -160,17 +170,24 @@ function restartLevel(){
 function gameOver(){
     life = 3;
     level=0;
+    timeStar = undefined;
     console.log('Game Over');
 }
 function gameWin(){
-    console.log('Felicidades has pasado el juego');
+
+    clearInterval(timeInterval);
+    console.log('Felicidades has pasado el juego');   
 }
 
 function showLives(){
-    const heartsArray = Array(life).fill(emojis['HEART']);
-    console.log(heartsArray);
+    const heartsArray = Array(life).fill(emojis['HEART']); //creamos un array con la cantidad de vidas que tenemos insertandole los emojis en cada posicion del array 
 
-    spanLives.innerHTML = heartsArray.join("");
+
+    spanLives.innerHTML = heartsArray.join(""); //insertamos la cantidad de corazones que tenemos en el array gracias a la propiedad join el cual los separa c
+}
+
+function showTime(){
+    spanTime.innerHTML = Date.now() - timeStar;
 }
 // EVENTOS DE MOVIMIENTO PARA EL JUGADOR.
 
