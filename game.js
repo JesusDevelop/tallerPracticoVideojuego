@@ -88,8 +88,8 @@ function startGame(){
     }
 
     if(!timeStar){
-        timeStar = Date.now();
-        timeInterval = setInterval(showTime,100);
+        timeStar = Date.now(); // asignamos el tiempo al momento de iniciar el juego.
+        timeInterval = setInterval(showTime,100); //set interval toma la funcion showTime y la ejecuta cada cierto tiempo le indiques en miliseguntos en este caso 100 milisegundos
     }
     const mapRows = map.trim().split('\n'); 
     const mapRowCols = mapRows.map(row => row.trim().split(''));  
@@ -175,7 +175,7 @@ function gameOver(){
 }
 function gameWin(){
 
-    clearInterval(timeInterval);
+    clearInterval(timeInterval); // finaliza la ejecucion de la funcion setInterval
     console.log('Felicidades has pasado el juego');   
 }
 
