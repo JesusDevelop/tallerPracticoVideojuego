@@ -15,17 +15,26 @@ const btnLeft = document.querySelector('#left');
 const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
 
+const spanLives = document.querySelector('#lives')
+
 
 window.addEventListener('load', setCanvasSize); // que cargue el juego luego de haber cargado la pagina o el html para evitar futuros errores
 window.addEventListener('resize', setCanvasSize);
 
 let canvasSize;
 let elementsSize;
+let level = 0;
+let life = 3;
 
 let playerPos = {
     x:undefined,
     y:undefined,
 };
+
+const doorPos ={
+    x:undefined,
+    y:undefined,
+}
 
 const giftPos = {
     x:undefined,
@@ -37,7 +46,9 @@ let enemiesPos = [];
 
 function movePlayer(){
     if(playerPos.x.toFixed(3) == giftPos.x.toFixed(3) && playerPos.y.toFixed(3) == giftPos.y.toFixed(3)){
-        console.log('has ganao');
+       
+            
+            nextLevel();   
     }
 
     const enemyCollision = enemiesPos.find(enemy => {
@@ -48,9 +59,10 @@ function movePlayer(){
         return enemyCollisionX && enemyCollisionY;
     });
 
-    if  (enemyCollision){
-        console.log('Chocaste con una bomba');
-    }
+    if  (enemyCollision){ 
+        game.fillText(emojis['BOMB_COLLISION'], enemiesPos.x,enemiesPos.y);
+        restartLevel(); }
+
     game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
     
 }
@@ -58,17 +70,21 @@ function movePlayer(){
 
 function startGame(){
 
-
-    console.log(canvasSize,elementsSize);
-
     game.font = elementsSize + 'px Verdana';
     game.textAlign = 'start';
 
-    game.clearRect(0,0,canvasSize,canvasSize);
-    enemiesPos = [];
-    const map = maps[1];
+   
+    const map = maps[level];
+
+    showLives();
+    if(!map){
+        gameWin();
+        return;
+    }
     const mapRows = map.trim().split('\n'); 
     const mapRowCols = mapRows.map(row => row.trim().split(''));  
+    game.clearRect(0,0,canvasSize,canvasSize);
+    enemiesPos = [];
 
     const imprimirMaps = mapRowCols.forEach( (row, rowI) => {   
         row.forEach( (col, colI) => {
@@ -76,11 +92,11 @@ function startGame(){
             const posX = elementsSize * (colI);
             const posY = elementsSize * (rowI+1);
 
-            if(playerPos.x === undefined && col == 'O'){
+            if(!playerPos.x && !playerPos.y && col == 'O'){
 
                 playerPos.x = posX;
                 playerPos.y = posY;
-                console.log({playerPos});
+                
             } else if (col == 'I'){
                 giftPos.x = posX;
                 giftPos.y = posY;
@@ -91,7 +107,10 @@ function startGame(){
                     x: posX,
                     y: posY,
                 });
-                
+                          
+            }else if (col == 'o'){
+                doorPos.x = posX;
+                doorPos.y = posY;
             }
 
             game.fillText(emoji, posX, posY);
@@ -121,6 +140,38 @@ function setCanvasSize(){
 
 }
 
+function nextLevel(){
+    console.log('Haz pasado de Nivel');
+    level++;
+    startGame();   
+    
+}
+function restartLevel(){
+    playerPos.x = doorPos.x; 
+    playerPos.y = doorPos.y;
+    life--;
+
+
+    if (life <= 0){
+        gameOver();
+    }
+    startGame();
+}
+function gameOver(){
+    life = 3;
+    level=0;
+    console.log('Game Over');
+}
+function gameWin(){
+    console.log('Felicidades has pasado el juego');
+}
+
+function showLives(){
+    const heartsArray = Array(life).fill(emojis['HEART']);
+    console.log(heartsArray);
+
+    spanLives.innerHTML = heartsArray.join("");
+}
 // EVENTOS DE MOVIMIENTO PARA EL JUGADOR.
 
 window.addEventListener('keydown',moveByKeys)
@@ -151,7 +202,7 @@ function moveByKeys(event){
 
 }
 function moveUp(){
-    if( playerPos.y - elementsSize  < elementsSize){
+    if( Math.ceil(playerPos.y - elementsSize)  < elementsSize){
         console.log('out');
     }
     else{
