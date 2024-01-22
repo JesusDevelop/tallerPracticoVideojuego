@@ -15,8 +15,10 @@ const btnLeft = document.querySelector('#left');
 const btnRight = document.querySelector('#right');
 const btnDown = document.querySelector('#down');
 
-const spanLives = document.querySelector('#lives')
-const spanTime = document.querySelector('#time')
+const spanLives = document.querySelector('#lives');
+const spanTime = document.querySelector('#time');
+const spanRecord = document.querySelector('#record');
+const pResult = document.querySelector('#result');
 
 
 window.addEventListener('load', setCanvasSize); // que cargue el juego luego de haber cargado la pagina o el html para evitar futuros errores
@@ -25,8 +27,9 @@ window.addEventListener('resize', setCanvasSize);
 let canvasSize;
 let elementsSize;
 let timeStar;
-let timeInterval = undefined;
+let timeInterval;
 let playerTime = 0;
+
 
 let level = 0;
 let life = 3;
@@ -48,6 +51,8 @@ const giftPos = {
 
 let enemiesPos = [];
 
+let bombExplosion = [];
+
 
 function movePlayer(){
     if(playerPos.x.toFixed(3) == giftPos.x.toFixed(3) && playerPos.y.toFixed(3) == giftPos.y.toFixed(3)){
@@ -58,14 +63,15 @@ function movePlayer(){
 
     const enemyCollision = enemiesPos.find(enemy => {
 
-        const enemyCollisionX = enemy.x == playerPos.x;
-        const enemyCollisionY = enemy.y == playerPos.y;
+        const enemyCollisionX = enemy.x.toFixed(3) == playerPos.x.toFixed(3);
+        const enemyCollisionY = enemy.y.toFixed(3) == playerPos.y.toFixed(3);
+            
 
         return enemyCollisionX && enemyCollisionY;
     });
 
     if  (enemyCollision){ 
-        game.fillText(emojis['BOMB_COLLISION'], enemiesPos.x,enemiesPos.y);
+
         restartLevel(); }
 
     game.fillText(emojis['PLAYER'], playerPos.x, playerPos.y);
@@ -90,8 +96,9 @@ function startGame(){
     if(!timeStar){
         timeStar = Date.now(); // asignamos el tiempo al momento de iniciar el juego.
         timeInterval = setInterval(showTime,100); //set interval toma la funcion showTime y la ejecuta cada cierto tiempo le indiques en miliseguntos en este caso 100 milisegundos
+        showRecord();
     }
-    const mapRows = map.trim().split('\n'); 
+    const mapRows = map.trim().split('\n'); // limpiamos el array de espacios en blanco con strim y y guardamos cada fila del mapa como un una posicion de un array  con el metodo split
     const mapRowCols = mapRows.map(row => row.trim().split(''));  
     game.clearRect(0,0,canvasSize,canvasSize);
     enemiesPos = [];
@@ -144,7 +151,7 @@ function setCanvasSize(){
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize);
 
-     elementsSize = (canvasSize / 10.2) ;
+     elementsSize = (canvasSize / 10) ;
 
      startGame();
 
@@ -175,9 +182,25 @@ function gameOver(){
 }
 function gameWin(){
 
-    clearInterval(timeInterval); // finaliza la ejecucion de la funcion setInterval
+   record = clearInterval(timeInterval); // finaliza la ejecucion de la funcion setInterval
+
+
+   const recordTime = localStorage.getItem('record_time');
+    const playerTime = Date.now() - timeStar; 
+
+    if(recordTime){
+       if(recordTime >= playerTime) {
+            localStorage.setItem('record_time', playerTime);
+            pResult.innerHTML = 'NUEVO RECORD!! FELICIDADES';
+       }else {
+        pResult.innerHTML = 'Lo siento, NO SUPERASTE EL RECORD';
+       }
+    }else{
+        localStorage.setItem('record_time', playerTime);
+    }
     console.log('Felicidades has pasado el juego');   
 }
+
 
 function showLives(){
     const heartsArray = Array(life).fill(emojis['HEART']); //creamos un array con la cantidad de vidas que tenemos insertandole los emojis en cada posicion del array 
@@ -188,6 +211,10 @@ function showLives(){
 
 function showTime(){
     spanTime.innerHTML = Date.now() - timeStar;
+}
+
+function showRecord(){
+    spanRecord.innerHTML = localStorage.getItem('record_time');
 }
 // EVENTOS DE MOVIMIENTO PARA EL JUGADOR.
 
@@ -239,7 +266,7 @@ function moveDown(){
     startGame();
 }
 function moveLeft(){
-    if( playerPos.x  - elementsSize < 0){
+    if( playerPos.x.toFixed(3)  - elementsSize < 0){
         console.log('out');
     }
     else{
