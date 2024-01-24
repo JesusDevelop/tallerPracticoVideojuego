@@ -159,7 +159,7 @@ function setCanvasSize(){
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize);
 
-     elementsSize = (canvasSize / 10) ;
+     elementsSize = (canvasSize / 10)  ;
     fixed(elementsSize);
     playerPos.x = undefined;
     playerPos.y = undefined;
@@ -192,7 +192,7 @@ function gameOver(){
 }
 function gameWin(){
 
-   record = clearInterval(timeInterval); // finaliza la ejecucion de la funcion setInterval
+   clearInterval(timeInterval); // finaliza la ejecucion de la funcion setInterval
 
 
    const recordTime = localStorage.getItem('record_time');
