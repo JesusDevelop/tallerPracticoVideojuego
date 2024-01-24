@@ -29,6 +29,7 @@ let elementsSize;
 let timeStar;
 let timeInterval;
 let playerTime = 0;
+let record;
 
 
 let level = 0;
@@ -53,9 +54,13 @@ let enemiesPos = [];
 
 let bombExplosion = [];
 
+function fixed(n){
+
+    return Number(n.toFixed(0));
+}
 
 function movePlayer(){
-    if(playerPos.x.toFixed(3) == giftPos.x.toFixed(3) && playerPos.y.toFixed(3) == giftPos.y.toFixed(3)){
+    if(fixed(playerPos.x) == fixed(giftPos.x) && fixed(playerPos.y) == fixed(giftPos.y)){
        
             
             nextLevel();   
@@ -63,8 +68,8 @@ function movePlayer(){
 
     const enemyCollision = enemiesPos.find(enemy => {
 
-        const enemyCollisionX = enemy.x.toFixed(3) == playerPos.x.toFixed(3);
-        const enemyCollisionY = enemy.y.toFixed(3) == playerPos.y.toFixed(3);
+        const enemyCollisionX = fixed(enemy.x) == fixed(playerPos.x);
+        const enemyCollisionY = fixed(enemy.y) == fixed(playerPos.y);
             
 
         return enemyCollisionX && enemyCollisionY;
@@ -140,19 +145,24 @@ function startGame(){
 
 function setCanvasSize(){
 
+
     if(window.innerHeight > window.innerWidth){
-        canvasSize = window.innerWidth * 0.8;
+        canvasSize = Number((window.innerWidth * 0.8).toFixed(0));
+        
     }
     else{
-        canvasSize = window.innerHeight * 0.8;
+        canvasSize = Number((window.innerHeight * 0.8).toFixed(0));      
     }
+
 
 
     canvas.setAttribute('width', canvasSize);
     canvas.setAttribute('height', canvasSize);
 
      elementsSize = (canvasSize / 10) ;
-
+    fixed(elementsSize);
+    playerPos.x = undefined;
+    playerPos.y = undefined;
      startGame();
 
 }
@@ -266,7 +276,7 @@ function moveDown(){
     startGame();
 }
 function moveLeft(){
-    if( playerPos.x.toFixed(3)  - elementsSize < 0){
+    if( Math.ceil(playerPos.x  - elementsSize) < 0){
         console.log('out');
     }
     else{
