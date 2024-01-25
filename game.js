@@ -29,7 +29,7 @@ let elementsSize;
 let timeStar;
 let timeInterval;
 let playerTime = 0;
-let record;
+
 
 
 let level = 0;
@@ -192,7 +192,7 @@ function gameOver(){
 }
 function gameWin(){
 
-   clearInterval(timeInterval); // finaliza la ejecucion de la funcion setInterval
+   const record = clearInterval(timeInterval); // finaliza la ejecucion de la funcion setInterval
 
 
    const recordTime = localStorage.getItem('record_time');
